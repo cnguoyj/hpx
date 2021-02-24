@@ -29,12 +29,12 @@
 #include <hpx/plugins/binary_filter_factory_base.hpp>
 #include <hpx/plugins/message_handler_factory_base.hpp>
 #include <hpx/prefix/find_prefix.hpp>
-#include <hpx/runtime/runtime_fwd.hpp>
 #include <hpx/runtime_configuration/component_commandline_base.hpp>
 #include <hpx/runtime_configuration/ini.hpp>
 #include <hpx/runtime_configuration/static_factory_data.hpp>
 #include <hpx/runtime_distributed.hpp>
 #include <hpx/runtime_distributed/find_localities.hpp>
+#include <hpx/runtime_distributed/runtime_fwd.hpp>
 #include <hpx/runtime_distributed/server/runtime_support.hpp>
 #include <hpx/runtime_distributed/stubs/runtime_support.hpp>
 #include <hpx/runtime_local/component_startup_shutdown_base.hpp>
@@ -1187,8 +1187,8 @@ namespace hpx { namespace components { namespace server {
 
             indirect_packaged_task ipt;
             callbacks.push_back(ipt.get_future());
-            apply_cb(
-                act, id, std::move(ipt), hpx::get_locality(), rtd->endpoints());
+            apply_cb(act, id, std::move(ipt), agas::get_locality(),
+                rtd->endpoints());
         }
 
         wait_all(callbacks);
@@ -1216,7 +1216,7 @@ namespace hpx { namespace components { namespace server {
         // handle console separately
         id_type id = naming::get_id_from_locality_id(0);
         apply_cb(
-            act, id, std::move(ipt), hpx::get_locality(), rtd->endpoints());
+            act, id, std::move(ipt), agas::get_locality(), rtd->endpoints());
 
         callback.wait();
 #endif

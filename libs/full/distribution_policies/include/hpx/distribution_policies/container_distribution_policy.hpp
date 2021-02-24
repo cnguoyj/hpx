@@ -11,6 +11,7 @@
 #include <hpx/actions_base/traits/is_distribution_policy.hpp>
 #include <hpx/components_base/agas_interface.hpp>
 #include <hpx/runtime_components/default_distribution_policy.hpp>
+#include <hpx/runtime_distributed/find_here.hpp>
 
 #include <hpx/assert.hpp>
 #include <hpx/serialization/serialize.hpp>

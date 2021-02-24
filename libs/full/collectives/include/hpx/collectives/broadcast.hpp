@@ -132,6 +132,7 @@ namespace hpx { namespace lcos {
 #include <hpx/modules/execution_base.hpp>
 #include <hpx/naming_base/id_type.hpp>
 #include <hpx/runtime_distributed/get_num_localities.hpp>
+#include <hpx/runtime_local/get_locality_id.hpp>
 #include <hpx/type_support/unused.hpp>
 
 #include <cstddef>

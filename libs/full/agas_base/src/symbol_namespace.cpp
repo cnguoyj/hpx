@@ -12,6 +12,7 @@
 #include <hpx/agas_base/server/symbol_namespace.hpp>
 #include <hpx/agas_base/symbol_namespace.hpp>
 #include <hpx/assert.hpp>
+#include <hpx/components_base/agas_interface.hpp>
 #include <hpx/hashing/jenkins_hash.hpp>
 #include <hpx/lcos/base_lco_with_value.hpp>
 #include <hpx/modules/async_distributed.hpp>
@@ -111,13 +112,13 @@ namespace hpx { namespace agas {
 
     naming::address symbol_namespace::addr() const
     {
-        return naming::address(hpx::get_locality(),
+        return naming::address(agas::get_locality(),
             components::component_agas_symbol_namespace, this->ptr());
     }
 
     naming::id_type symbol_namespace::gid() const
     {
-        return naming::id_type(get_service_instance(hpx::get_locality()),
+        return naming::id_type(get_service_instance(agas::get_locality()),
             naming::id_type::unmanaged);
     }
 
@@ -126,8 +127,8 @@ namespace hpx { namespace agas {
     {
 #if !defined(HPX_COMPUTE_DEVICE_CODE)
         naming::id_type dest = symbol_namespace_locality(key);
-        if (naming::get_locality_from_gid(dest.get_gid()) ==
-            hpx::get_locality())
+
+        if (naming::get_locality_id_from_id(dest) == agas::get_locality_id())
         {
             return hpx::make_ready_future(
                 server_->bind(std::move(key), std::move(gid)));
@@ -145,13 +146,14 @@ namespace hpx { namespace agas {
 
     bool symbol_namespace::bind(std::string key, naming::gid_type gid)
     {
-#if !defined(HPX_COMPUTE_DEVICE_CODE)
         naming::id_type dest = symbol_namespace_locality(key);
-        if (naming::get_locality_from_gid(dest.get_gid()) ==
-            hpx::get_locality())
+
+        if (naming::get_locality_id_from_id(dest) == agas::get_locality_id())
         {
             return server_->bind(std::move(key), std::move(gid));
         }
+
+#if !defined(HPX_COMPUTE_DEVICE_CODE)
         server::symbol_namespace::bind_action action;
         return action(std::move(dest), std::move(key), std::move(gid));
 #else
@@ -166,8 +168,8 @@ namespace hpx { namespace agas {
         std::string key) const
     {
         naming::id_type dest = symbol_namespace_locality(key);
-        if (naming::get_locality_from_gid(dest.get_gid()) ==
-            hpx::get_locality())
+
+        if (naming::get_locality_id_from_id(dest) == agas::get_locality_id())
         {
             naming::gid_type raw_gid = server_->resolve(std::move(key));
 
@@ -195,8 +197,8 @@ namespace hpx { namespace agas {
     hpx::future<naming::id_type> symbol_namespace::unbind_async(std::string key)
     {
         naming::id_type dest = symbol_namespace_locality(key);
-        if (naming::get_locality_from_gid(dest.get_gid()) ==
-            hpx::get_locality())
+
+        if (naming::get_locality_id_from_id(dest) == agas::get_locality_id())
         {
             naming::gid_type raw_gid = server_->unbind(std::move(key));
 
@@ -225,8 +227,8 @@ namespace hpx { namespace agas {
         std::string const& name, bool call_for_past_events, hpx::id_type lco)
     {
         naming::id_type dest = symbol_namespace_locality(name);
-        if (naming::get_locality_from_gid(dest.get_gid()) ==
-            hpx::get_locality())
+
+        if (naming::get_locality_id_from_id(dest) == agas::get_locality_id())
         {
             return hpx::make_ready_future(
                 server_->on_event(name, call_for_past_events, std::move(lco)));

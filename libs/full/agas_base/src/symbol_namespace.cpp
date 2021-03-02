@@ -12,8 +12,8 @@
 #include <hpx/agas_base/server/symbol_namespace.hpp>
 #include <hpx/agas_base/symbol_namespace.hpp>
 #include <hpx/assert.hpp>
+#include <hpx/async_distributed/base_lco_with_value.hpp>
 #include <hpx/hashing/jenkins_hash.hpp>
-#include <hpx/lcos/base_lco_with_value.hpp>
 #include <hpx/modules/async_distributed.hpp>
 #include <hpx/modules/collectives.hpp>
 #include <hpx/modules/format.hpp>
